@@ -129,6 +129,7 @@ public class BffService {
 
         String encounterId = oldClinicalNote.getEncounterId().toString();
         Jedis jedis = new Jedis(SPRING_REDIS_URL, SPRING_REDIS_PORT);
+        jedis.auth(SPRING_REDIS_PASSWORD);
         JedisLock lock = new JedisLock(jedis, encounterId, 10000, 20000);
 
         if (!lock.acquire()) {
@@ -210,6 +211,8 @@ public class BffService {
         String encounterId = newClinicalNote.getEncounterId().toString();
 
         Jedis jedis = new Jedis(SPRING_REDIS_URL, SPRING_REDIS_PORT);
+
+        jedis.auth(SPRING_REDIS_PASSWORD);
 
         JedisLock lock = new JedisLock(jedis, encounterId, 0, 10000);
 

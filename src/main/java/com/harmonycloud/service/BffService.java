@@ -41,7 +41,8 @@ public class BffService {
     private String SPRING_REDIS_URL;
     @Value("${cims.redis.port}")
     private int SPRING_REDIS_PORT;
-
+    @Value("${cims.redis.password}")
+    private String SPRING_REDIS_PASSWORD;
     /**
      * save clinical note and diagnosis
      *
@@ -63,6 +64,7 @@ public class BffService {
         String encounterId = clinicalNote.getEncounterId().toString();
 
         Jedis jedis = new Jedis(SPRING_REDIS_URL, SPRING_REDIS_PORT);
+        jedis.auth(SPRING_REDIS_PASSWORD);
         JedisLock lock = new JedisLock(jedis, encounterId, 1000, 10000);
 
         if (!lock.acquire()) {
